@@ -21,4 +21,4 @@ sleep 3
 systemctl daemon-reload
 systemctl restart rikntp.timer
 
-logger "uptimer.sh complete"
+logger "ntptimer.sh complete"
