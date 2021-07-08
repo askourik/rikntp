@@ -59,5 +59,5 @@ install(FILES ${PROJECT_SOURCE_DIR}/rikntp.conf DESTINATION /etc/rikntp COMPONEN
 install(FILES ${PROJECT_SOURCE_DIR}/rikntp.service DESTINATION /etc/systemd/system)
 install(FILES ${PROJECT_SOURCE_DIR}/rikntp.timer DESTINATION /etc/systemd/system)
 install(PROGRAMS ${PROJECT_SOURCE_DIR}/ntp.sh DESTINATION /usr/sbin)
-install(PROGRAMS ${PROJECT_SOURCE_DIR}/uptimer.sh DESTINATION /usr/sbin)
+install(PROGRAMS ${PROJECT_SOURCE_DIR}/ntptimer.sh DESTINATION /usr/sbin)
 
