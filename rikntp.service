@@ -1,0 +1,10 @@
+[Unit]
+Description=Logs system statistics to the systemd journal
+Wants=rikntp.timer
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/ntp.sh
+
+[Install]
+WantedBy=multi-user.target
