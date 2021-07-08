@@ -1,0 +1,13 @@
+[Unit]
+Description=rikntp
+
+[Service]
+Restart=always
+RestartSec=86400
+ExecStart=/usr/bin/rikntp
+StartLimitInterval=0
+Type=dbus
+BusName=xyz.openbmc_project.rikntp
+
+[Install]
+WantedBy=basic.target
