@@ -20,34 +20,21 @@
 #include <sdbusplus/asio/object_server.hpp>
 
 static constexpr const char* RikntpServiceName =
-    "xyz.openbmc_project.Rikntp";
+    "xyz.openbmc_project.rikntp";
 static constexpr const char* RikntpIface =
-    "xyz.openbmc_project.Rikntp";
+    "xyz.openbmc_project.rikntp";
 static constexpr const char* RikntpPath =
     "/xyz/openbmc_project/rikntp";
 
 class RikntpMgr
 {
-    enum class RikntpMode
-    {
-        AUTO = 0,
-        MINIMAL = 1,
-        OPTIMAL = 2,
-        MAXIMAL = 3
-    };
-
     boost::asio::io_service& io;
     sdbusplus::asio::object_server& server;
     std::shared_ptr<sdbusplus::asio::connection> conn;
     std::shared_ptr<sdbusplus::asio::dbus_interface> iface;
 
-    std::string mode = "2_2_info@example.com";
+    std::string mode = "0_0.ru.pool.ntp.org";
 
-    std::unordered_map<std::string, std::string> readAllVariable();
-    void setntpMode(const std::string& mode);
-    std::string readConf();
-    void writeConf(const std::string &m);
-    //void rikntp_set_timer(const std::string &time_str);
 
   public:
     RikntpMgr(boost::asio::io_service& io,
