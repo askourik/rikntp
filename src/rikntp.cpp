@@ -54,10 +54,10 @@ RikntpMgr::RikntpMgr(boost::asio::io_service& io_,
         ("Rikntp started mode " + mode).c_str());
 
     int ret_code = 0;
-    ret_code += system("/usr/sbin/ntp.sh");
+    ret_code += system("/bin/sh /usr/sbin/ntptimer.sh");
     if(ret_code)
-        throw std::runtime_error("Errors occurred while running ntp.sh");
-    phosphor::logging::log<phosphor::logging::level::INFO>("Rikntp executed ntp.sh");
+        throw std::runtime_error("Errors occurred while running ntptimer.sh");
+    phosphor::logging::log<phosphor::logging::level::INFO>("Rikntp executed ntptimer.sh");
     ret_code = 0;
     ret_code += system("systemctl start rikntp.service");
     if(ret_code)
