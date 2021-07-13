@@ -33,7 +33,7 @@ class RikntpMgr
     std::shared_ptr<sdbusplus::asio::connection> conn;
     std::shared_ptr<sdbusplus::asio::dbus_interface> iface;
 
-    std::string mode = "0_0.ru.pool.ntp.org";
+    std::string mode = "Manual Firsttime";
 
 
   public:

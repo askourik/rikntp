@@ -5,28 +5,52 @@ mode2=$(echo $mode1 | tr -d \")
 arr2=(${mode2//./ })
 mode=${arr2[5]}
 servers=$(busctl get-property xyz.openbmc_project.Network /xyz/openbmc_project/network/eth0 xyz.openbmc_project.Network.EthernetInterface NTPServers)
-arr3=(${servers// / })
-numserv=${arr3[1]}
+if [ -z "$servers" ]; then
+  numserv=0
+else
+  arr3=(${servers// / })
+  numserv=${arr3[1]}
+fi
 
-if [ $mode == 'Manual' ] || [ $numserv -eq 0 ]; then
+logger "ntp.sh start"
+params=$(tr ' ' ' |' < /etc/rikntp/rikntp.conf) 
+arrold=(${params// / })
+modeold=${arrold[0]}
+ntpserverold=${arrold[1]}
+logger "ntp.sh modeold=$modeold ntpserverold=$ntpserverold"
+
+if [ $numserv -eq 0 ]; then
+  mode='Manual'
+fi
+
+if [ $mode == 'Manual' ] && [ $ntpserverold == 'Firsttime' ]; then
+  logger "ntp.sh modenew=$mode ntpservernew=Manual"
   sleep 5
   newdate=$(nc time.nist.gov 13 | grep -o '[0-9]\{2\}\-[0-9]\{2\}\-[0-9]\{2\} [0-9]\{2\}\:[0-9]\{2\}\:[0-9]\{2\}' | sed -e 's/^/20/')
-  date -s "$newdate"  >> /etc/rikntp/rikntp.conf
+  date -s "$newdate"
+  logger "ntp.sh set Manual = $newdate"
+  echo $mode Manual > /etc/rikntp/rikntp.conf
   sleep 5
 elif [ $mode == 'NTP' ]; then
-for i in "${!arr3[@]}"; do 
+ for i in "${!arr3[@]}"; do 
   sleep 5
   if [ $i -gt 1 ];  then
     ntpserver=$(echo ${arr3[$i]} | tr -d \") 
-    ntpdate -u $ntpserver >> /etc/rikntp/rikntp.conf
+    ntpdate -u $ntpserver
     if [ $? -eq 0 ]; 
-    then 
+    then
+      logger "ntp.sh modenew=$mode ntpservernew=$ntpserver"
+      newdate = $(date) 
+      logger "ntp.sh set NTP from $ntpserver = $newdate"
+      echo $mode $ntpserver > /etc/rikntp/rikntp.conf
       sleep 5
       break
     fi
+    logger "ntp.sh set NTP from $ntpserver failed, trying next"
     sleep 5
   fi
-done
+ done
 
 fi
 
+logger "ntp.sh complete"

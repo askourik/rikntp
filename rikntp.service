@@ -4,7 +4,7 @@ Wants=rikntp.timer
 
 [Service]
 Type=oneshot
-ExecStart=/usr/sbin/ntp.sh
+ExecStart=/bin/sh -c '/usr/sbin/ntp.sh'
 
 [Install]
 WantedBy=multi-user.target

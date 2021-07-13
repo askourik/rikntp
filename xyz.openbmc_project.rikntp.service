@@ -3,7 +3,7 @@ Description=rikntp
 
 [Service]
 Restart=always
-RestartSec=86400
+RestartSec=10
 ExecStart=/usr/bin/rikntp
 StartLimitInterval=0
 Type=dbus
