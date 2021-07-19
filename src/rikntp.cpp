@@ -58,7 +58,7 @@ RikntpMgr::RikntpMgr(boost::asio::io_service& io_,
     //if(ret_code)
     //    throw std::runtime_error("Errors occurred while running ntptimer.sh");
     //phosphor::logging::log<phosphor::logging::level::INFO>("Rikntp executed ntptimer.sh");
-    ret_code = 0;
+    //ret_code = 0;
     ret_code += system("systemctl start rikntp.service");
     if(ret_code)
         throw std::runtime_error("Errors occurred while setting timer");

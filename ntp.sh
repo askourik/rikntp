@@ -27,6 +27,8 @@ if [ $mode == 'Manual' ] && [ $ntpserverold == 'Firsttime' ]; then
   logger "ntp.sh modenew=$mode ntpservernew=Manual"
   sleep 5
   newdate=$(nc time.nist.gov 13 | grep -o '[0-9]\{2\}\-[0-9]\{2\}\-[0-9]\{2\} [0-9]\{2\}\:[0-9]\{2\}\:[0-9]\{2\}' | sed -e 's/^/20/')
+  logger "ntp.sh   systemctl enable pch-time-sync.service"
+  systemctl enable pch-time-sync.service
   date -s "$newdate"
   logger "ntp.sh set Manual = $newdate"
   echo $mode Manual > /etc/rikntp/rikntp.conf
@@ -39,8 +41,10 @@ elif [ $mode == 'NTP' ]; then
     ntpdate -u $ntpserver
     if [ $? -eq 0 ]; 
     then
+      logger "ntp.sh   systemctl disable pch-time-sync.service"
+      systemctl disable pch-time-sync.service
       logger "ntp.sh modenew=$mode ntpservernew=$ntpserver"
-      newdate = $(date) 
+      newdate=$(date) 
       logger "ntp.sh set NTP from $ntpserver = $newdate"
       echo $mode $ntpserver > /etc/rikntp/rikntp.conf
       sleep 5
