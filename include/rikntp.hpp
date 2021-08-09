@@ -19,12 +19,11 @@
 #include <boost/asio/io_service.hpp>
 #include <sdbusplus/asio/object_server.hpp>
 
-static constexpr const char* RikntpServiceName =
-    "xyz.openbmc_project.rikntp";
-static constexpr const char* RikntpIface =
-    "xyz.openbmc_project.rikntp";
-static constexpr const char* RikntpPath =
-    "/xyz/openbmc_project/rikntp";
+static constexpr const char* RikModeManual =
+    "xyz.openbmc_project.Time.Synchronization.Method.Manual";
+
+static constexpr const char* RikModeNTP =
+    "xyz.openbmc_project.Time.Synchronization.Method.NTP";
 
 class RikntpMgr
 {
@@ -33,7 +32,7 @@ class RikntpMgr
     std::shared_ptr<sdbusplus::asio::connection> conn;
     std::shared_ptr<sdbusplus::asio::dbus_interface> iface;
 
-    std::string mode = "Manual Firsttime";
+    std::string mode = RikModeManual;
 
 
   public:

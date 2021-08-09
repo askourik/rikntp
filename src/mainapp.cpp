@@ -21,7 +21,7 @@ int main()
 {
     boost::asio::io_service io;
     auto conn = std::make_shared<sdbusplus::asio::connection>(io);
-    conn->request_name(RikntpServiceName);
+    conn->request_name("xyz.openbmc_project.rikntp");
     sdbusplus::asio::object_server server(conn);
 
 

@@ -34,19 +34,55 @@ RikntpMgr::RikntpMgr(boost::asio::io_service& io_,
     io(io_),
     server(srv_), conn(conn_)
 {
-    iface = server.add_interface(RikntpPath, RikntpIface);
-    iface->register_method(
-        "ReadMode", [this]() {
+    iface = server.add_interface("/xyz/openbmc_project/rikntp", "xyz.openbmc_project.Rikntp");
+
+    iface->register_property(
+        "rikntpflag", std::string(""), 
+        [](const std::string& req, std::string& propertyValue) { propertyValue = req; return 1; },
+        [this](const std::string& property) {
+            if (property!="")
+                this->mode = property;
+            auto now = std::chrono::system_clock::now();
+            auto timePoint = std::chrono::system_clock::to_time_t(now);
             phosphor::logging::log<phosphor::logging::level::INFO>(
-                ("Rikntp register read mode " + this->mode).c_str());
+                ("!!!Rikntp rikntpflag set " + this->mode + " at " + std::ctime(&timePoint)).c_str());
+            if (this->mode == RikModeNTP)
+            {
+                int ret_code = system("/bin/sh /usr/sbin/ntptimer.sh");
+                if(ret_code)
+                    throw std::runtime_error("Errors occurred while running ntptimer.sh at setntp");
+                phosphor::logging::log<phosphor::logging::level::INFO>("Rikntp executed ntptimer.sh at setntp");
+            }
+            return this->mode;
+        });
+
+
+
+    /*iface->register_property(
+        "rikntpservers", std::string(""), [this](const std::string& req, std::string& propertyValue) { propertyValue = req; return 1; },
+        [this](const std::string& property) {
+            //auto now = std::chrono::system_clock::now();
+            //auto timePoint = std::chrono::system_clock::to_time_t(now);
+            phosphor::logging::log<phosphor::logging::level::INFO>(
+                ("!!!Rikntp rikntpservers get " + property).c_str());
+            return property;
+        });
+
+
+
+    iface->register_method(
+        "Getrikntpflag", [this]() {
+            phosphor::logging::log<phosphor::logging::level::INFO>(
+                ("!!!Rikntp Getrikntpflag" + this->mode).c_str());
             return this->mode; 
         });
 
     iface->register_method(
-        "WriteMode", [this](const std::string& mode) {
+        "Getrikntpservers", [this]() {
             phosphor::logging::log<phosphor::logging::level::INFO>(
-                ("Rikntp register write mode " + mode).c_str());
-        });
+                ("!!!Rikntp Getrikntpservers" + this->mode).c_str());
+            return this->mode; 
+        });*/
     iface->initialize(true);
 
 
@@ -59,7 +95,7 @@ RikntpMgr::RikntpMgr(boost::asio::io_service& io_,
     //    throw std::runtime_error("Errors occurred while running ntptimer.sh");
     //phosphor::logging::log<phosphor::logging::level::INFO>("Rikntp executed ntptimer.sh");
     //ret_code = 0;
-    ret_code += system("systemctl start rikntp.service");
+    ////!!!!!!!!!!!!!!ret_code += system("systemctl start rikntp.service");
     if(ret_code)
         throw std::runtime_error("Errors occurred while setting timer");
 
