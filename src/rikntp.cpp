@@ -48,7 +48,7 @@ RikntpMgr::RikntpMgr(boost::asio::io_service& io_,
                 ("!!!Rikntp rikntpflag set " + this->mode + " at " + std::ctime(&timePoint)).c_str());
             if (this->mode == RikModeNTP)
             {
-                int ret_code = system("/bin/sh /usr/sbin/ntptimer.sh");
+                int ret_code = system("/bin/sh /usr/sbin/ntp.sh");
                 if(ret_code)
                     throw std::runtime_error("Errors occurred while running ntptimer.sh at setntp");
                 phosphor::logging::log<phosphor::logging::level::INFO>("Rikntp executed ntptimer.sh at setntp");
@@ -58,31 +58,6 @@ RikntpMgr::RikntpMgr(boost::asio::io_service& io_,
 
 
 
-    /*iface->register_property(
-        "rikntpservers", std::string(""), [this](const std::string& req, std::string& propertyValue) { propertyValue = req; return 1; },
-        [this](const std::string& property) {
-            //auto now = std::chrono::system_clock::now();
-            //auto timePoint = std::chrono::system_clock::to_time_t(now);
-            phosphor::logging::log<phosphor::logging::level::INFO>(
-                ("!!!Rikntp rikntpservers get " + property).c_str());
-            return property;
-        });
-
-
-
-    iface->register_method(
-        "Getrikntpflag", [this]() {
-            phosphor::logging::log<phosphor::logging::level::INFO>(
-                ("!!!Rikntp Getrikntpflag" + this->mode).c_str());
-            return this->mode; 
-        });
-
-    iface->register_method(
-        "Getrikntpservers", [this]() {
-            phosphor::logging::log<phosphor::logging::level::INFO>(
-                ("!!!Rikntp Getrikntpservers" + this->mode).c_str());
-            return this->mode; 
-        });*/
     iface->initialize(true);
 
 
@@ -90,11 +65,6 @@ RikntpMgr::RikntpMgr(boost::asio::io_service& io_,
         ("Rikntp started mode " + mode).c_str());
 
     int ret_code = 0;
-    //ret_code += system("/bin/sh /usr/sbin/ntptimer.sh");
-    //if(ret_code)
-    //    throw std::runtime_error("Errors occurred while running ntptimer.sh");
-    //phosphor::logging::log<phosphor::logging::level::INFO>("Rikntp executed ntptimer.sh");
-    //ret_code = 0;
     ////!!!!!!!!!!!!!!ret_code += system("systemctl start rikntp.service");
     if(ret_code)
         throw std::runtime_error("Errors occurred while setting timer");
