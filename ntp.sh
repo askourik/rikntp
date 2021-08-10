@@ -29,11 +29,12 @@ if [ $mode == 'Manual' ] && [ $ntpserverold == 'Firsttime' ]; then
   logger "ntp.sh modenew=$mode ntpservernew=Manual"
   #sleep 5
   #newdate=$(nc time.nist.gov 13 | grep -o '[0-9]\{2\}\-[0-9]\{2\}\-[0-9]\{2\} [0-9]\{2\}\:[0-9]\{2\}\:[0-9]\{2\}' | sed -e 's/^/20/')
-  #logger "ntp.sh   systemctl enable pch-time-sync.service"
-  #systemctl enable pch-time-sync.service
-  #sleep 5
-  #systemctl start pch-time-sync.service
-  #sleep 5
+  logger "ntp.sh   systemctl enable pch-time-sync.service"
+  systemctl enable pch-time-sync.service
+  sleep 5
+  logger "ntp.sh   systemctl start pch-time-sync.service"
+  systemctl start pch-time-sync.service
+  sleep 5
   #date -s "$newdate"
   #logger "ntp.sh set Manual = $newdate"
   logger "ntp.sh firsttine write $mode Manual to rikntp.conf"
@@ -47,11 +48,12 @@ elif [ $mode == 'NTP' ]; then
     ntpdate -u $ntpserver
     if [ $? -eq 0 ]; 
     then
-      #logger "ntp.sh   systemctl disable pch-time-sync.service"
-      #systemctl stop pch-time-sync.service
-      #sleep 5
-      #systemctl disable pch-time-sync.service
-      #sleep 5
+      logger "ntp.sh   systemctl stop pch-time-sync.service"
+      systemctl stop pch-time-sync.service
+      sleep 5
+      logger "ntp.sh   systemctl disable pch-time-sync.service"
+      systemctl disable pch-time-sync.service
+      sleep 5
       logger "ntp.sh modenew=$mode ntpservernew=$ntpserver"
       newdate=$(date) 
       logger "ntp.sh set NTP from $ntpserver = $newdate"
