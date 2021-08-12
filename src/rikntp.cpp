@@ -46,12 +46,12 @@ RikntpMgr::RikntpMgr(boost::asio::io_service& io_,
             auto timePoint = std::chrono::system_clock::to_time_t(now);
             phosphor::logging::log<phosphor::logging::level::INFO>(
                 ("!!!Rikntp rikntpflag set " + this->mode + " at " + std::ctime(&timePoint)).c_str());
-            if (this->mode == RikModeNTP)
+            //if (this->mode == RikModeNTP)
             {
                 int ret_code = system("/bin/sh /usr/sbin/ntp.sh");
                 if(ret_code)
-                    throw std::runtime_error("Errors occurred while running ntptimer.sh at setntp");
-                phosphor::logging::log<phosphor::logging::level::INFO>("Rikntp executed ntptimer.sh at setntp");
+                    throw std::runtime_error("Errors occurred while running ntp.sh at setntp");
+                phosphor::logging::log<phosphor::logging::level::INFO>("Rikntp executed ntp.sh at setntp");
             }
             return this->mode;
         });
