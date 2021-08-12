@@ -62,9 +62,9 @@ elif [ $mode == 'NTP' ]; then
   if [ $i -gt 1 ];  then
     ntpserver=$(echo ${arr3[$i]} | tr -d \") 
     ntpdate -u $ntpserver
-    sleep 5
     if [ $? -eq 0 ]; 
     then
+      sleep 5
       logger "ntp.sh modenew=$mode ntpservernew=$ntpserver"
       newdate=$(date) 
       logger "ntp.sh set NTP from $ntpserver = $newdate"

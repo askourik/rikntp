@@ -65,7 +65,7 @@ RikntpMgr::RikntpMgr(boost::asio::io_service& io_,
         ("Rikntp started mode " + mode).c_str());
 
     int ret_code = 0;
-    ////!!!!!!!!!!!!!!ret_code += system("systemctl start rikntp.service");
+    ret_code += system("systemctl start rikntp.service");
     if(ret_code)
         throw std::runtime_error("Errors occurred while setting timer");
 
